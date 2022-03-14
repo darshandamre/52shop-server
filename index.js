@@ -4,6 +4,7 @@ import cors from "cors";
 import { sequelize } from "./db.js";
 import { authRouter } from "./routes/auth.js";
 import { userRouter } from "./routes/user.js";
+import { User } from "./models/user.js";
 
 const main = async () => {
   const app = express();
@@ -11,7 +12,7 @@ const main = async () => {
 
   // check db
   await sequelize.authenticate();
-  // await User.sync({ force: true });
+  await User.sync();
   console.log("db connected");
 
   app.use(
