@@ -1,48 +1,40 @@
-import dotenv from "dotenv";
-dotenv.config();
-import Sequelize from "sequelize";
+// import bodyParser from "body-parser";
 import express from "express";
+import cors from "cors";
+import { sequelize } from "./db.js";
+import { authRouter } from "./routes/auth.js";
+import { userRouter } from "./routes/user.js";
 
 const main = async () => {
   const app = express();
   const port = process.env.PORT ?? 4000;
 
-  const sequelize = new Sequelize(process.env.DATABASE_URI);
-
+  // check db
   await sequelize.authenticate();
+  // await User.sync({ force: true });
   console.log("db connected");
 
-  // var User = sequelize.define(
-  //   "user",
-  //   {
-  //     firstName: {
-  //       type: Sequelize.STRING,
-  //       field: "first_name" // Will result in an attribute that is firstName when user facing but first_name in the database
-  //     },
-  //     lastName: {
-  //       type: Sequelize.STRING
-  //     }
-  //   },
-  //   {
-  //     freezeTableName: true // Model tableName will be the same as the model name
-  //   }
-  // );
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true
+    })
+  );
 
-  // User.sync({ force: true }).then(function () {
-  //   // Table created
-  //   return User.create({
-  //     firstName: "John",
-  //     lastName: "Hancock"
-  //   });
-  // });
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
-  app.get("/", (req, res) => {
+  app.get("/", (_, res) => {
     res.send("Hello World!");
   });
 
+  app.use("/api", authRouter);
+  app.use("/api", userRouter);
+
+  // start express server
   app.listen(port, () => {
     console.log(`app listening on port ${port}`);
   });
 };
 
-main().catch(err => console.log(err));
+main().catch(err => console.error(err));
