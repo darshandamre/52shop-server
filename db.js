@@ -7,6 +7,9 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
     max: 5,
     min: 0,
     idle: 10000
+  },
+  dialectOptions: {
+    ssl: true
   }
 });
 
