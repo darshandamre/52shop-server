@@ -5,6 +5,10 @@ import { sequelize } from "./db.js";
 import { authRouter } from "./routes/auth.js";
 import { userRouter } from "./routes/user.js";
 import { User } from "./models/user.js";
+import { Category } from "./models/category.js";
+import { Product } from "./models/product.js";
+import { WishlistItem } from "./models/wishlist-item.js";
+import { CartItem } from "./models/cart-item.js";
 
 const main = async () => {
   const app = express();
@@ -13,6 +17,10 @@ const main = async () => {
   // check db
   await sequelize.authenticate();
   await User.sync();
+  await Category.sync({ force: true });
+  await Product.sync({ force: true });
+  await WishlistItem.sync({ force: true });
+  await CartItem.sync({ force: true });
   console.log("db connected");
 
   app.use(
