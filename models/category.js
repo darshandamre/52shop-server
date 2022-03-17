@@ -1,5 +1,5 @@
-import { sequelize } from "../db.js";
 import { DataTypes } from "sequelize";
+import { sequelize } from "../db.js";
 
 const { STRING } = DataTypes;
 
@@ -9,10 +9,9 @@ const Category = sequelize.define("category", {
     allowNull: false
   },
   description: {
-    type: STRING,
-    allowNull: false
+    type: STRING
   },
-  pictueLink: {
+  pictureLink: {
     type: STRING,
     allowNull: false
   }

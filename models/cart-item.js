@@ -1,7 +1,7 @@
-import { sequelize } from "../db.js";
 import { DataTypes } from "sequelize";
-import { User } from "./user.js";
+import { sequelize } from "../db.js";
 import { Product } from "./product.js";
+import { User } from "./user.js";
 
 const { INTEGER } = DataTypes;
 
