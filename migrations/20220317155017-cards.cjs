@@ -81,7 +81,7 @@ module.exports = {
       {
         name: "Orbit v8",
         description:
-          "From another universe. Following “suit” with the V7s, we decided to put out a limited number of V8 Parallel edition sets. Designed to be the “inverse” of the main deck, this is a must-have for collectors and Orbit enthusiasts who want to complete the line of orbit decks. Crushed Bee stock",
+          "From another universe. Following 'suit' with the V7s, we decided to put out a limited number of V8 Parallel edition sets. Designed to be the 'inverse' of the main deck, this is a must-have for collectors and Orbit enthusiasts who want to complete the line of orbit decks. Crushed Bee stock",
         stock: 0,
         price: 1099,
         discount: 100,
