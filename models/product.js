@@ -10,7 +10,7 @@ const Product = sequelize.define("product", {
     allowNull: false
   },
   description: {
-    type: STRING,
+    type: STRING(600),
     allowNull: false
   },
   stock: {
