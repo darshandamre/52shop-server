@@ -13,6 +13,7 @@ module.exports = {
         rating: 2.8,
         pictureLink:
           "https://shop-images.vercel.app/products/cards/bicycle-standard-red.webp",
+        fastDelivery: true,
         categoryId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -28,6 +29,7 @@ module.exports = {
         pictureLink:
           "https://shop-images.vercel.app/products/cards/category-cards.webp",
         categoryId: 1,
+        fastDelivery: true,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -42,6 +44,7 @@ module.exports = {
         pictureLink:
           "https://shop-images.vercel.app/products/cards/first-playing-cards.webp",
         categoryId: 1,
+        fastDelivery: false,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -49,13 +52,14 @@ module.exports = {
         name: "Seafoam Fontaines",
         description:
           "Seafoam Fontaines are the fourth NEON Pantone Fontaine. They are 1 of 2500 printed at USPCC in crushed stock.",
-        stock: 33,
+        stock: 0,
         price: 999,
         discount: 100,
         rating: 3.2,
         pictureLink:
           "https://shop-images.vercel.app/products/cards/fontaine-neon-orange.webp",
         categoryId: 1,
+        fastDelivery: false,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -70,6 +74,7 @@ module.exports = {
         pictureLink:
           "https://shop-images.vercel.app/products/cards/bicycle-standard-red.webp",
         categoryId: 1,
+        fastDelivery: true,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -77,13 +82,14 @@ module.exports = {
         name: "Orbit v8",
         description:
           "From another universe. Following “suit” with the V7s, we decided to put out a limited number of V8 Parallel edition sets. Designed to be the “inverse” of the main deck, this is a must-have for collectors and Orbit enthusiasts who want to complete the line of orbit decks. Crushed Bee stock",
-        stock: 50,
+        stock: 0,
         price: 1099,
         discount: 100,
         rating: 3.8,
         pictureLink:
           "https://shop-images.vercel.app/products/cards/orbit-v8.webp",
         categoryId: 1,
+        fastDelivery: false,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -98,6 +104,7 @@ module.exports = {
         pictureLink:
           "https://shop-images.vercel.app/products/cards/red-wheels-playing-cards.webp",
         categoryId: 1,
+        fastDelivery: true,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -112,6 +119,7 @@ module.exports = {
         pictureLink:
           "https://shop-images.vercel.app/products/cards/summer-nocs-blue.webp",
         categoryId: 1,
+        fastDelivery: true,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -126,6 +134,7 @@ module.exports = {
         pictureLink:
           "https://shop-images.vercel.app/products/cards/summer-nocs-orange.webp",
         categoryId: 1,
+        fastDelivery: true,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -140,6 +149,7 @@ module.exports = {
         pictureLink:
           "https://shop-images.vercel.app/products/cards/virtuoso-playing-cards.webp",
         categoryId: 1,
+        fastDelivery: false,
         createdAt: new Date(),
         updatedAt: new Date()
       }

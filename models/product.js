@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
 import { Category } from "./category.js";
 
-const { STRING, INTEGER, FLOAT } = DataTypes;
+const { STRING, INTEGER, FLOAT, BOOLEAN } = DataTypes;
 
 const Product = sequelize.define("product", {
   name: {
@@ -27,6 +27,10 @@ const Product = sequelize.define("product", {
   },
   rating: {
     type: FLOAT,
+    allowNull: false
+  },
+  fastDelivery: {
+    type: BOOLEAN,
     allowNull: false
   },
   pictureLink: {

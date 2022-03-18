@@ -1,6 +1,6 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
-    queryInterface.bulkInsert("categories", [
+    await queryInterface.bulkInsert("categories", [
       {
         name: "Cards",
         pictureLink:
