@@ -72,7 +72,7 @@ module.exports = {
         discount: 200,
         rating: 4.1,
         pictureLink:
-          "https://shop-images.vercel.app/products/cards/bicycle-standard-red.webp",
+          "https://shop-images.vercel.app/products/cards/memento-mori-playing-cards.webp",
         categoryId: 1,
         fastDelivery: true,
         createdAt: new Date(),

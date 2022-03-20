@@ -1,13 +1,19 @@
 import cors from "cors";
 import express from "express";
 import { sequelize } from "./db.js";
-import { CartItem } from "./models/cart-item.js";
-import { Category } from "./models/category.js";
-import { Product } from "./models/product.js";
-import { User } from "./models/user.js";
-import { WishlistItem } from "./models/wishlist-item.js";
-import { authRouter } from "./routes/auth.js";
-import { userRouter } from "./routes/user.js";
+import {
+  User,
+  Category,
+  Product,
+  CartItem,
+  WishlistItem
+} from "./models/index.js";
+import {
+  authRouter,
+  userRouter,
+  productRouter,
+  categoryRouter
+} from "./routes/index.js";
 
 const main = async () => {
   const app = express();
@@ -34,6 +40,8 @@ const main = async () => {
 
   app.use("/api", authRouter);
   app.use("/api", userRouter);
+  app.use("/api", productRouter);
+  app.use("/api", categoryRouter);
 
   // start express server
   app.listen(port, () => {

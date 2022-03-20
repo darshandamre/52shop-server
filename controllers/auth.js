@@ -33,7 +33,7 @@ const signup = async (req, res) => {
   const { id, name, email } = user;
   const token = jwt.sign({ id, name, email }, process.env.SECRET);
 
-  return res.json({
+  return res.status(201).json({
     data: {
       token,
       user: {
@@ -102,8 +102,6 @@ const isAuthenticated = (req, res, next) => {
   }
 
   const user = jwt.verify(token, process.env.SECRET);
-
-  console.log(user);
   req.user = user;
   return next();
 };
