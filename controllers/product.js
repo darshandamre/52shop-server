@@ -1,16 +1,36 @@
 import { Product } from "../models/index.js";
 
-const getProducts = async (_, res) => {
+const findProductById = async (req, res, next, productId) => {
+  let product;
   try {
-    const products = await Product.findAll({ limit: 30 });
-    return res.json({
-      data: {
-        products
-      }
-    });
+    product = await Product.findByPk(productId);
   } catch (err) {
-    console.error(err);
+    return next(err);
   }
+  if (!product) {
+    return res.status(404).json({
+      error: "product not found"
+    });
+  }
+
+  req.product = product;
+  return next();
 };
 
-export { getProducts };
+const getProducts = async (_, res, next) => {
+  let products;
+
+  try {
+    products = await Product.findAll({ limit: 30 });
+  } catch (err) {
+    return next(err);
+  }
+
+  return res.json({
+    data: {
+      products
+    }
+  });
+};
+
+export { findProductById, getProducts };

@@ -5,14 +5,20 @@ import { User } from "./user.js";
 
 const { INTEGER } = DataTypes;
 
-const CartItem = sequelize.define("cart_item", {
-  quantity: {
-    type: INTEGER,
-    allowNull: false
+const CartItem = sequelize.define(
+  "cartItem",
+  {
+    quantity: {
+      type: INTEGER,
+      allowNull: false
+    }
+  },
+  {
+    timestamps: false
   }
-});
+);
 
-User.belongsToMany(Product, { through: CartItem });
+User.belongsToMany(Product, { through: CartItem, as: "cart" });
 Product.belongsToMany(User, { through: CartItem });
 
 export { CartItem };

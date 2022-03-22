@@ -1,6 +1,6 @@
 import { Category } from "../models/index.js";
 
-const getCategories = async (_, res) => {
+const getCategories = async (_, res, next) => {
   try {
     const categories = await Category.findAll({ limit: 30 });
 
@@ -8,7 +8,7 @@ const getCategories = async (_, res) => {
       data: { categories }
     });
   } catch (err) {
-    console.error(err);
+    return next(err);
   }
 };
 

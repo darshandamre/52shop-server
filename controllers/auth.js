@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.js";
 
-const signup = async (req, res) => {
+const signup = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
@@ -16,18 +16,18 @@ const signup = async (req, res) => {
     const hashedPassword = await argon2.hash(password);
     user = await User.create({ name, email, password: hashedPassword });
   } catch (err) {
-    console.error(err);
-
     if (err.parent.code === "23505") {
-      return res.status(422).json({
+      return res.status(400).json({
         errors: [
           {
             field: "email",
-            message: "email already in use"
+            message: "user already exists"
           }
         ]
       });
     }
+
+    return next(err);
   }
 
   const { id, name, email } = user;
@@ -45,7 +45,7 @@ const signup = async (req, res) => {
   });
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
@@ -53,32 +53,38 @@ const login = async (req, res) => {
 
   const { email, password } = req.body;
 
-  const user = await User.findOne({
-    where: { email }
-  });
+  let user;
 
-  if (!user) {
-    return res.json({
-      errors: [
-        {
-          field: "email",
-          message: "user doesn't exist"
-        }
-      ]
+  try {
+    user = await User.findOne({
+      where: { email }
     });
-  }
 
-  const valid = await argon2.verify(user.password, password);
+    if (!user) {
+      return res.json({
+        errors: [
+          {
+            field: "email",
+            message: "user doesn't exist"
+          }
+        ]
+      });
+    }
 
-  if (!valid) {
-    return res.json({
-      errors: [
-        {
-          field: "password",
-          message: "wrong password"
-        }
-      ]
-    });
+    const valid = await argon2.verify(user.password, password);
+
+    if (!valid) {
+      return res.json({
+        errors: [
+          {
+            field: "password",
+            message: "wrong password"
+          }
+        ]
+      });
+    }
+  } catch (err) {
+    return next(err);
   }
 
   const token = jwt.sign(
@@ -91,17 +97,32 @@ const login = async (req, res) => {
   });
 };
 
-const isAuthenticated = (req, res, next) => {
+const isAuthenticated = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    return res.status(403).json({
-      error: "NOT LOGGED IN"
+    return res.status(401).json({
+      error: "not logged in"
     });
   }
 
   const user = jwt.verify(token, process.env.SECRET);
+
+  try {
+    const userExists = !!(await User.findByPk(user.id, {
+      attributes: ["id"]
+    }));
+
+    if (!userExists) {
+      return res.status(404).json({
+        error: "user not found"
+      });
+    }
+  } catch (err) {
+    return next(err);
+  }
+
   req.user = user;
   return next();
 };
