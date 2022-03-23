@@ -1,4 +1,5 @@
-import { User, Product, WishlistItem } from "../models/index.js";
+import { sequelize } from "../db.js";
+import { User, Product, WishlistItem, CartItem } from "../models/index.js";
 
 const getWishlist = async (req, res, next) => {
   try {
@@ -63,10 +64,52 @@ const deleteFromWishlist = async (req, res, next) => {
     return next(err);
   }
 
-  return res.status(204).send();
+  return res.status(204).end();
 };
 
-// TODO: move from cart to wishlist
-const moveToWishlist = () => {};
+const moveToWishlist = async (req, res, next) => {
+  const { user, product } = req;
+
+  const t = await sequelize.transaction();
+  try {
+    const deleted = await CartItem.destroy({
+      where: {
+        userId: user.id,
+        productId: product.id
+      },
+      transaction: t
+    });
+
+    if (!deleted) {
+      await t.rollback();
+      return res.status(404).json({
+        error: "product not in cart"
+      });
+    }
+
+    await WishlistItem.create(
+      {
+        userId: user.id,
+        productId: product.id
+      },
+      { transaction: t }
+    );
+
+    await t.commit();
+    return res.json({
+      product
+    });
+  } catch (err) {
+    await t.rollback();
+
+    if (err.parent?.code === "23505") {
+      return res.status(400).json({
+        error: "product already in wishlist"
+      });
+    }
+
+    return next(err);
+  }
+};
 
 export { getWishlist, addToWishlist, deleteFromWishlist, moveToWishlist };

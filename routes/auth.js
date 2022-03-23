@@ -1,6 +1,6 @@
 import express from "express";
 import { check } from "express-validator";
-import { signup, login } from "../controllers/auth.js";
+import { signup, login, validateForm } from "../controllers/auth.js";
 const router = express.Router();
 
 // signup
@@ -8,8 +8,11 @@ router.post(
   "/signup",
   check(["name", "password"])
     .isLength({ min: 3 })
-    .withMessage("must be atleast 3 characters long"),
+    .withMessage((_, { path }) => {
+      return `${path} must be atleast 3 characters long`;
+    }),
   check("email").isEmail().withMessage("invalid email"),
+  validateForm,
   signup
 );
 
@@ -17,9 +20,8 @@ router.post(
 router.post(
   "/login",
   check("email").isEmail().withMessage("invalid email"),
-  check("password")
-    .isLength({ min: 3 })
-    .withMessage("must be atleast 3 characters long"),
+  check("password").isLength({ min: 3 }).withMessage("wrong password"),
+  validateForm,
   login
 );
 

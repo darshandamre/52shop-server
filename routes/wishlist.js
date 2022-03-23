@@ -10,18 +10,16 @@ import {
 
 const router = Router();
 
+router.use(isAuthenticated);
+
 router.param("productId", findProductById);
 
-router.get("/user/wishlist", isAuthenticated, getWishlist);
+router.get("/user/wishlist", getWishlist);
 
-router.post("/user/wishlist/:productId", isAuthenticated, addToWishlist);
+router.post("/user/wishlist/:productId", addToWishlist);
 
-router.delete("/user/wishlist/:productId", isAuthenticated, deleteFromWishlist);
+router.delete("/user/wishlist/:productId", deleteFromWishlist);
 
-router.post(
-  "/user/move-to-wishlist/:productId",
-  isAuthenticated,
-  moveToWishlist
-);
+router.post("/user/move-to-wishlist/:productId", moveToWishlist);
 
 export { router as wishlistRouter };

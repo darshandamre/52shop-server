@@ -10,7 +10,11 @@ const CartItem = sequelize.define(
   {
     quantity: {
       type: INTEGER,
-      allowNull: false
+      allowNull: false,
+      defaultValue: 1,
+      validate: {
+        min: 1
+      }
     }
   },
   {

@@ -14,7 +14,8 @@ import {
   userRouter,
   productRouter,
   categoryRouter,
-  wishlistRouter
+  wishlistRouter,
+  cartRouter
 } from "./routes/index.js";
 
 const main = async () => {
@@ -93,10 +94,12 @@ const main = async () => {
   app.use("/api", productRouter);
   app.use("/api", categoryRouter);
   app.use("/api", wishlistRouter);
+  app.use("/api", cartRouter);
 
-  app.use((err, _, res) => {
+  // error handling middleware functions must have four arguments
+  app.use((err, _, res, __) => {
     console.error(err);
-    return res.status(500).send("some error occured");
+    return res.status(500).json({ error: err });
   });
 
   // start express server

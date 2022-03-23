@@ -3,12 +3,22 @@ import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.js";
 
-const signup = async (req, res, next) => {
+const validateForm = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
+    return res.status(422).json({
+      errors: errors.array().map(error => ({
+        name: "form",
+        field: error.param,
+        message: error.msg
+      }))
+    });
   }
 
+  return next();
+};
+
+const signup = async (req, res, next) => {
   let user;
 
   try {
@@ -17,11 +27,12 @@ const signup = async (req, res, next) => {
     user = await User.create({ name, email, password: hashedPassword });
   } catch (err) {
     if (err.parent.code === "23505") {
-      return res.status(400).json({
+      return res.json({
         errors: [
           {
+            name: "form",
             field: "email",
-            message: "user already exists"
+            message: "email has already been taken"
           }
         ]
       });
@@ -46,11 +57,6 @@ const signup = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
   const { email, password } = req.body;
 
   let user;
@@ -61,11 +67,12 @@ const login = async (req, res, next) => {
     });
 
     if (!user) {
-      return res.json({
+      return res.status(404).json({
         errors: [
           {
+            name: "form",
             field: "email",
-            message: "user doesn't exist"
+            message: "user not found"
           }
         ]
       });
@@ -74,9 +81,10 @@ const login = async (req, res, next) => {
     const valid = await argon2.verify(user.password, password);
 
     if (!valid) {
-      return res.json({
+      return res.status(401).json({
         errors: [
           {
+            form: "form",
             field: "password",
             message: "wrong password"
           }
@@ -103,28 +111,49 @@ const isAuthenticated = async (req, res, next) => {
 
   if (!token) {
     return res.status(401).json({
-      error: "not logged in"
+      errors: [
+        {
+          name: "auth",
+          message: "no token provided"
+        }
+      ]
     });
   }
 
-  const user = jwt.verify(token, process.env.SECRET);
-
   try {
+    const user = jwt.verify(token, process.env.SECRET);
+
     const userExists = !!(await User.findByPk(user.id, {
       attributes: ["id"]
     }));
 
     if (!userExists) {
       return res.status(404).json({
-        error: "user not found"
+        errors: [
+          {
+            name: "auth",
+            message: "user not found"
+          }
+        ]
       });
     }
+    req.user = user;
   } catch (err) {
+    if (err.message === "invalid token") {
+      return res.status(401).json({
+        errors: [
+          {
+            name: "auth",
+            message: err.message
+          }
+        ]
+      });
+    }
+
     return next(err);
   }
 
-  req.user = user;
   return next();
 };
 
-export { signup, login, isAuthenticated };
+export { validateForm, signup, login, isAuthenticated };
