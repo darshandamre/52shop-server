@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { isAuthenticated } from "../controllers/auth.js";
 import {
   addToCart,
   decrementCartItemQuantity,
@@ -11,8 +10,6 @@ import {
 import { findProductById } from "../controllers/product.js";
 
 const router = Router();
-
-router.use(isAuthenticated);
 
 router.param("productId", findProductById);
 

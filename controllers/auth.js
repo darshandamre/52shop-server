@@ -27,7 +27,7 @@ const signup = async (req, res, next) => {
     user = await User.create({ name, email, password: hashedPassword });
   } catch (err) {
     if (err.parent.code === "23505") {
-      return res.json({
+      return res.status(400).json({
         errors: [
           {
             name: "form",
@@ -45,13 +45,11 @@ const signup = async (req, res, next) => {
   const token = jwt.sign({ id, name, email }, process.env.SECRET);
 
   return res.status(201).json({
-    data: {
-      token,
-      user: {
-        id,
-        name,
-        email
-      }
+    token,
+    user: {
+      id,
+      name,
+      email
     }
   });
 };
@@ -101,7 +99,8 @@ const login = async (req, res, next) => {
   );
 
   return res.json({
-    data: { token, user: { id: user.id, name: user.name, email: user.email } }
+    token,
+    user: { id: user.id, name: user.name, email: user.email }
   });
 };
 

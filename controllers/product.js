@@ -27,9 +27,7 @@ const getProducts = async (_, res, next) => {
   }
 
   return res.json({
-    data: {
-      products
-    }
+    products
   });
 };
 

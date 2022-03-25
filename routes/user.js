@@ -1,9 +1,8 @@
 import express from "express";
-import { isAuthenticated } from "../controllers/auth.js";
 import { getUserInfo } from "../controllers/user.js";
 
 const router = express.Router();
 
-router.get("/user/get-info", isAuthenticated, getUserInfo);
+router.get("/user/get-info", getUserInfo);
 
 export { router as userRouter };

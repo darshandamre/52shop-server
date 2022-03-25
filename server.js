@@ -1,6 +1,7 @@
 import argon2 from "argon2";
 import cors from "cors";
 import express from "express";
+import { isAuthenticated } from "./controllers/auth.js";
 import { sequelize } from "./db.js";
 import {
   User,
@@ -85,9 +86,7 @@ const main = async () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  app.get("/", (_, res) => {
-    res.send("Hello World!");
-  });
+  app.use("/api/user", isAuthenticated);
 
   app.use("/api", authRouter);
   app.use("/api", userRouter);

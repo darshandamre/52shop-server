@@ -5,7 +5,7 @@ const router = express.Router();
 
 // signup
 router.post(
-  "/signup",
+  "/auth/signup",
   check(["name", "password"])
     .isLength({ min: 3 })
     .withMessage((_, { path }) => {
@@ -18,7 +18,7 @@ router.post(
 
 // login
 router.post(
-  "/login",
+  "/auth/login",
   check("email").isEmail().withMessage("invalid email"),
   check("password").isLength({ min: 3 }).withMessage("wrong password"),
   validateForm,

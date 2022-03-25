@@ -26,10 +26,10 @@ const getUserInfo = async (req, res, next) => {
     return next(err);
   }
 
+  user.password = undefined;
+
   return res.json({
-    data: {
-      user
-    }
+    user
   });
 };
 

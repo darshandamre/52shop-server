@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { isAuthenticated } from "../controllers/auth.js";
 import { findProductById } from "../controllers/product.js";
 import {
   addToWishlist,
@@ -9,8 +8,6 @@ import {
 } from "../controllers/wishlist.js";
 
 const router = Router();
-
-router.use(isAuthenticated);
 
 router.param("productId", findProductById);
 
