@@ -39,7 +39,7 @@ const addToWishlist = async (req, res, next) => {
     return next(err);
   }
 
-  return res.json({
+  return res.status(201).json({
     product
   });
 };
@@ -87,27 +87,28 @@ const moveToWishlist = async (req, res, next) => {
       });
     }
 
-    await WishlistItem.create(
-      {
+    const [, created] = await WishlistItem.findOrCreate({
+      where: {
         userId: user.id,
         productId: product.id
       },
-      { transaction: t }
-    );
+      transaction: t
+    });
 
     await t.commit();
-    return res.json({
-      product
-    });
-  } catch (err) {
-    await t.rollback();
-
-    if (err.parent?.code === "23505") {
-      return res.status(400).json({
-        error: "product already in wishlist"
+    if (created) {
+      return res.status(201).json({
+        created,
+        product
       });
     }
 
+    return res.status(200).json({
+      created,
+      message: "product already in wishlist"
+    });
+  } catch (err) {
+    await t.rollback();
     return next(err);
   }
 };

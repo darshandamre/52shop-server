@@ -45,7 +45,7 @@ const addToCart = async (req, res, next) => {
     return next(err);
   }
 
-  return res.json({
+  return res.status(201).json({
     product: {
       ...product.dataValues,
       cartItem: {
@@ -176,33 +176,30 @@ const moveToCart = async (req, res, next) => {
       });
     }
 
-    await CartItem.create(
-      {
-        userId: user.id,
-        productId: product.id,
-        quantity: 1
-      },
-      { transaction: t }
-    );
+    const [, created] = await CartItem.findOrCreate({
+      where: { userId: user.id, productId: product.id },
+      transaction: t
+    });
 
     await t.commit();
-    return res.json({
-      product: {
-        ...product.dataValues,
-        cartItem: {
-          quantity: 1
+    if (created) {
+      return res.status(201).json({
+        created,
+        product: {
+          ...product.dataValues,
+          cartItem: {
+            quantity: 1
+          }
         }
-      }
-    });
-  } catch (err) {
-    await t.rollback();
-
-    if (err.parent?.code === "23505") {
-      return res.status(400).json({
-        error: "product already in cart"
       });
     }
 
+    return res.status(200).json({
+      created,
+      message: "product already in cart"
+    });
+  } catch (err) {
+    await t.rollback();
     return next(err);
   }
 };
