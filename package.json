@@ -9,8 +9,7 @@
   },
   "scripts": {
     "dev": "nodemon ./server.js",
-    "start": "node ./server.js",
-    "build": "sequelize db:migrate --env production && yarn start"
+    "start": " node ./server.js"
   },
   "keywords": [],
   "license": "ISC",
