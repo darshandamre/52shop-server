@@ -25,7 +25,7 @@ module.exports = {
         discount: 200,
         rating: 3.5,
         pictureLink:
-          "https://shop-images.vercel.app/products/cards/category-cards.webp",
+          "https://shop-images.vercel.app/products/magic-tricks/moses-card.webp",
         categoryId: 4,
         fastDelivery: true,
         createdAt: new Date(),

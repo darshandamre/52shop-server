@@ -1,22 +1,15 @@
-import argon2 from "argon2";
 import cors from "cors";
+import "dotenv/config";
 import express from "express";
 import { isAuthenticated } from "./controllers/auth.js";
 import { sequelize } from "./db.js";
 import {
-  User,
-  Category,
-  Product,
-  CartItem,
-  WishlistItem
-} from "./models/index.js";
-import {
   authRouter,
-  userRouter,
-  productRouter,
+  cartRouter,
   categoryRouter,
-  wishlistRouter,
-  cartRouter
+  productRouter,
+  userRouter,
+  wishlistRouter
 } from "./routes/index.js";
 
 const main = async () => {
@@ -27,54 +20,6 @@ const main = async () => {
   await sequelize.authenticate();
   await sequelize.sync();
   console.log("db connected");
-
-  // await User.create({
-  //   name: "ben",
-  //   email: "ben@ben.com",
-  //   password: await argon2.hash("ben")
-  // });
-
-  // await WishlistItem.bulkCreate([
-  //   {
-  //     userId: 1,
-  //     productId: 1
-  //   },
-  //   {
-  //     userId: 1,
-  //     productId: 3
-  //   },
-  //   {
-  //     userId: 1,
-  //     productId: 6
-  //   },
-  //   {
-  //     userId: 1,
-  //     productId: 15
-  //   }
-  // ]);
-
-  // await CartItem.bulkCreate([
-  //   {
-  //     userId: 1,
-  //     productId: 2,
-  //     quantity: 3
-  //   },
-  //   {
-  //     userId: 1,
-  //     productId: 4,
-  //     quantity: 5
-  //   },
-  //   {
-  //     userId: 1,
-  //     productId: 8,
-  //     quantity: 9
-  //   },
-  //   {
-  //     userId: 1,
-  //     productId: 13,
-  //     quantity: 1
-  //   }
-  // ]);
 
   app.use(
     cors({

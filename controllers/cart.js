@@ -33,19 +33,16 @@ const addToCart = async (req, res, next) => {
     });
   } catch (err) {
     if (err.parent?.code === "23505") {
-      return res.status(400).json({
-        errors: [
-          {
-            name: "cart",
-            message: "product already in cart"
-          }
-        ]
+      return res.status(200).json({
+        created: false,
+        message: "product already in cart"
       });
     }
     return next(err);
   }
 
   return res.status(201).json({
+    created: true,
     product: {
       ...product.dataValues,
       cartItem: {
