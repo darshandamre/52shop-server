@@ -178,8 +178,8 @@ const moveToCart = async (req, res, next) => {
       transaction: t
     });
 
-    await t.commit();
     if (created) {
+      await t.commit();
       return res.status(201).json({
         created,
         product: {
@@ -191,9 +191,18 @@ const moveToCart = async (req, res, next) => {
       });
     }
 
+    const [[[cartItem]]] = await CartItem.increment("quantity", {
+      where: { userId: user.id, productId: product.id },
+      transaction: t
+    });
+    t.commit();
+
     return res.status(200).json({
       created,
-      message: "product already in cart"
+      product: {
+        ...product.dataValues,
+        cartItem
+      }
     });
   } catch (err) {
     await t.rollback();
